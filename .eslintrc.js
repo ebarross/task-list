@@ -17,6 +17,7 @@ module.exports = {
   rules: {
     'no-unused-vars': 'warn',
     'import/extensions': 'off',
+    'import/prefer-default-export': 'off',
     'react/jsx-filename-extension': [
       1,
       {

@@ -24,6 +24,8 @@ module.exports = {
         extensions: ['.tsx'],
       },
     ],
+    'react/prop-types': 'off',
+    'react/require-default-props': 'off',
   },
   settings: {
     'import/resolver': {

@@ -13,7 +13,11 @@ function TaskList({ tasks }: Props) {
   return (
     <S.Container>
       {tasks.map((task, index) => (
-        <Task key={index} text={task.text} onDelete={() => onDelete(index)} />
+        <Task
+          key={`${task.text}-${index}`}
+          text={task.text}
+          onDelete={() => onDelete(index)}
+        />
       ))}
     </S.Container>
   );

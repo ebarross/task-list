@@ -6,9 +6,10 @@ import * as S from './styles';
 
 type Props = {
   sections: TSection[];
+  onDelete: (index: number) => void;
 };
 
-function SectionList({ sections }: Props) {
+function SectionList({ sections, onDelete }: Props) {
   return (
     <S.Container>
       {sections.map((section, index) => (
@@ -16,6 +17,7 @@ function SectionList({ sections }: Props) {
           key={`${section.title}-${index}`}
           title={section.title}
           color={section.color}
+          onDelete={() => onDelete(index)}
         />
       ))}
     </S.Container>

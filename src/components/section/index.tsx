@@ -4,15 +4,17 @@ import { Task } from '../../types';
 import TaskList from '../task-list';
 
 import * as S from './styles';
+import DeleteButton from '../delete-button';
 
 type Props = {
   title: string;
   color?: string;
+  onDelete: () => void;
 };
 
 const defaultColor = '#e3e3e380';
 
-function Section({ title, color = defaultColor }: Props) {
+function Section({ title, color = defaultColor, onDelete }: Props) {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const addTask = () => {
@@ -39,6 +41,9 @@ function Section({ title, color = defaultColor }: Props) {
         <S.Title>
           <S.Text color={color}>{title}</S.Text>
         </S.Title>
+        <S.Actions>
+          <DeleteButton onClick={onDelete} />
+        </S.Actions>
       </S.Header>
       <S.Body>
         <TaskList tasks={tasks} onDelete={deleteTask} />

@@ -22,6 +22,16 @@ function Home() {
     }
   };
 
+  const deleteSection = (index: number) => {
+    // eslint-disable-next-line no-restricted-globals
+    const confirmed = confirm('Are you sure?');
+    if (confirmed) {
+      const newSections = [...sections];
+      newSections.splice(index, 1);
+      setSections(newSections);
+    }
+  };
+
   return (
     <S.Container>
       <S.Content>
@@ -33,7 +43,7 @@ function Home() {
         </S.Header>
         <S.Body>
           {sections.length > 0 ? (
-            <SectionList sections={sections} />
+            <SectionList sections={sections} onDelete={deleteSection} />
           ) : (
             <S.NoContentMessage>
               <p>Oops, looks like there&apos;s nothing here.</p>

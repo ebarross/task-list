@@ -9,6 +9,8 @@ export const Container = styled.div`
 export const Header = styled.div`
   padding: 8px 0px;
   display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 export const Title = styled.div`
@@ -28,6 +30,14 @@ export const Text = styled.div<{ color: string }>`
   padding: 4px 8px;
   border-radius: 4px;
   background-color: ${(props) => props.color};
+`;
+
+export const Actions = styled.div`
+  display: none;
+
+  ${Container}:hover & {
+    display: block;
+  }
 `;
 
 export const Body = styled.div`

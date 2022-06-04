@@ -13,15 +13,23 @@ export const Content = styled.div`
 `;
 
 export const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: rgb(233 233 231) 0px -1px 0px inset;
+
   h1 {
     font-size: 40px;
-  }
-
-  hr {
-    border-top: 1px solid #b1b1b16e;
+    margin-bottom: 16px;
   }
 `;
 
 export const Body = styled.div`
   padding: 16px;
+`;
+
+export const NoContentMessage = styled.div`
+  text-align: center;
+  margin-top: 48px;
+  font-size: 24px;
 `;

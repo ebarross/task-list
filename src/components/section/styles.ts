@@ -4,11 +4,10 @@ export const Container = styled.div`
   width: 300px;
   height: auto;
   min-height: 500px;
-  background: #9999992b;
 `;
 
 export const Header = styled.div`
-  padding: 8px;
+  padding: 8px 0px;
   display: flex;
 `;
 
@@ -31,4 +30,8 @@ export const Text = styled.div<{ color: string }>`
   background-color: ${(props) => props.color};
 `;
 
-export const Body = styled.div``;
+export const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;

@@ -8,9 +8,21 @@ export const Container = styled.div`
   transition: background 20ms ease-out;
   background: #ffffff;
   cursor: pointer;
+  position: relative;
 
   :hover {
     background: rgba(55, 53, 47, 0.08);
+  }
+`;
+
+export const Actions = styled.div`
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: none;
+
+  ${Container}:hover & {
+    display: block;
   }
 `;
 

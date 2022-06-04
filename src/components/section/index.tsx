@@ -23,6 +23,16 @@ function Section({ title, color = defaultColor }: Props) {
     }
   };
 
+  const deleteTask = (index: number) => {
+    // eslint-disable-next-line no-restricted-globals
+    const confirmed = confirm('Are you sure?');
+    if (confirmed) {
+      const newTasks = [...tasks];
+      newTasks.splice(index, 1);
+      setTasks(newTasks);
+    }
+  };
+
   return (
     <S.Container>
       <S.Header>
@@ -31,7 +41,7 @@ function Section({ title, color = defaultColor }: Props) {
         </S.Title>
       </S.Header>
       <S.Body>
-        <TaskList tasks={tasks} />
+        <TaskList tasks={tasks} onDelete={deleteTask} />
         <AddButton onClick={addTask} />
       </S.Body>
     </S.Container>

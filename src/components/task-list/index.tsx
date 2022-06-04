@@ -6,13 +6,14 @@ import * as S from './styles';
 
 type Props = {
   tasks: TTask[];
+  onDelete: (index: number) => void;
 };
 
 function TaskList({ tasks }: Props) {
   return (
     <S.Container>
       {tasks.map((task, index) => (
-        <Task key={index} text={task.text} />
+        <Task key={index} text={task.text} onDelete={() => onDelete(index)} />
       ))}
     </S.Container>
   );

@@ -26,6 +26,7 @@ module.exports = {
     ],
     'react/prop-types': 'off',
     'react/require-default-props': 'off',
+    'react/no-array-index-key': 'off',
   },
   settings: {
     'import/resolver': {

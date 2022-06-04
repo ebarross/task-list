@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import Button from '../../components/button';
-import Section from '../../components/section';
+import SectionList from '../../components/section-list';
+import { Section as TSection } from '../../types';
 
 import * as S from './styles';
-
-type TSection = {
-  title: string;
-  color: string;
-};
 
 function Home() {
   const [sections, setSections] = useState<TSection[]>([]);
@@ -20,20 +16,11 @@ function Home() {
         ...sections,
         {
           title,
-          color: 'red',
+          color: '#fdecc8',
         },
       ]);
     }
   };
-
-  const renderSections = () =>
-    sections.map((section) => (
-      <Section
-        key={section.title}
-        title={section.title}
-        color={section.color}
-      />
-    ));
 
   return (
     <S.Container>
@@ -46,7 +33,7 @@ function Home() {
         </S.Header>
         <S.Body>
           {sections.length > 0 ? (
-            renderSections()
+            <SectionList sections={sections} />
           ) : (
             <S.NoContentMessage>
               <p>Oops, looks like there&apos;s nothing here.</p>

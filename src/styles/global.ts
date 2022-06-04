@@ -7,7 +7,7 @@ export default createGlobalStyle`
     
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
-    color: #333333;
+    color: #080708;
   }
 
   html, body, #root {

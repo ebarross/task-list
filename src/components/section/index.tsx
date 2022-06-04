@@ -13,7 +13,9 @@ function Section({ title, color = defaultColor }: Props) {
   return (
     <S.Container>
       <S.Header>
-        <S.Title color={color}>{title}</S.Title>
+        <S.Title>
+          <S.Text color={color}>{title}</S.Text>
+        </S.Title>
       </S.Header>
       <S.Body />
     </S.Container>

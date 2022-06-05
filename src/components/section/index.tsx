@@ -15,12 +15,20 @@ type Props = {
 function Section({ data, onDelete }: Props) {
   const { id: sectionId, title, color } = data;
   const [dragTarget, setDragTarget] = useState('');
-  const { sections, addTask, deleteTask, moveSection } = useAppContext();
+  const { sections, updateSection, addTask, deleteTask, moveSection } =
+    useAppContext();
   const tasks = sections.find((s) => s.id === sectionId)?.tasks;
 
   if (!tasks) {
     return null;
   }
+
+  const handleEdit = () => {
+    const newTitle = prompt('New section title:');
+    if (newTitle) {
+      updateSection(sectionId, newTitle);
+    }
+  };
 
   const handleAdd = () => {
     const text = prompt('Task text:');
@@ -62,7 +70,7 @@ function Section({ data, onDelete }: Props) {
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
-        <S.Title>
+        <S.Title onClick={handleEdit}>
           <S.Text color={color}>{title}</S.Text>
         </S.Title>
         <S.Actions>

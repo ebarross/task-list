@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Task as TaskType } from '../../types';
 import Task from '../task';
 

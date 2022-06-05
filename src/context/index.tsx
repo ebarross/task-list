@@ -4,6 +4,7 @@ import { Section, SectionData, TaskData } from '../types';
 type State = {
   sections: Section[];
   addSection: (section: SectionData) => void;
+  updateSection: (id: number, title: string) => void;
   deleteSection: (id: number) => void;
   addTask: (sectionId: number, task: TaskData) => void;
   deleteTask: (sectionId: number, id: number) => void;
@@ -137,10 +138,22 @@ function AppProvider({ children }: ProviderProps) {
     }
   };
 
+  const updateSection = (id: number, title: string) => {
+    const section = sections.find((s) => s.id === id);
+    if (section) {
+      const newSection = { ...section, title };
+      const index = sections.indexOf(section);
+      const newSections = [...sections];
+      newSections[index] = newSection;
+      setSections(newSections);
+    }
+  };
+
   // eslint-disable-next-line react/jsx-no-constructed-context-values
   const value = {
     sections,
     addSection,
+    updateSection,
     deleteSection,
     addTask,
     deleteTask,

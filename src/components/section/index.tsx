@@ -1,37 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
 import AddButton from '../add-button';
-import { Task } from '../../types';
+import { Section as SectionType } from '../../types';
 import TaskList from '../task-list';
 
 import * as S from './styles';
 import DeleteButton from '../delete-button';
+import { useAppContext } from '../../context';
 
 type Props = {
-  title: string;
-  color?: string;
+  data: SectionType;
   onDelete: () => void;
 };
 
-const defaultColor = '#e3e3e380';
+function Section({ data, onDelete }: Props) {
+  const { id: sectionId, title, color } = data;
+  const { tasks, addTask, deleteTask } = useAppContext();
+  const sectionTasks = tasks.filter((task) => task.sectionId === sectionId);
 
-function Section({ title, color = defaultColor, onDelete }: Props) {
-  const [tasks, setTasks] = useState<Task[]>([]);
-
-  const addTask = () => {
-    // eslint-disable-next-line no-alert
+  const handleAdd = () => {
     const text = prompt('Task text:');
-    if (text) {
-      setTasks([...tasks, { text }]);
+    if (text && sectionId) {
+      addTask({ sectionId, text });
     }
   };
 
-  const deleteTask = (index: number) => {
-    // eslint-disable-next-line no-restricted-globals
+  const handleDelete = (id: number) => {
     const confirmed = confirm('Are you sure?');
     if (confirmed) {
-      const newTasks = [...tasks];
-      newTasks.splice(index, 1);
-      setTasks(newTasks);
+      deleteTask(id);
     }
   };
 
@@ -46,8 +42,8 @@ function Section({ title, color = defaultColor, onDelete }: Props) {
         </S.Actions>
       </S.Header>
       <S.Body>
-        <TaskList tasks={tasks} onDelete={deleteTask} />
-        <AddButton onClick={addTask} />
+        <TaskList tasks={sectionTasks} onDelete={handleDelete} />
+        <AddButton onClick={handleAdd} />
       </S.Body>
     </S.Container>
   );

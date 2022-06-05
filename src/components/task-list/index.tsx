@@ -1,22 +1,22 @@
 import React from 'react';
-import { Task as TTask } from '../../types';
+import { Task as TaskType } from '../../types';
 import Task from '../task';
 
 import * as S from './styles';
 
 type Props = {
-  tasks: TTask[];
-  onDelete: (index: number) => void;
+  tasks: TaskType[];
+  onDelete: (id: number) => void;
 };
 
-function TaskList({ tasks }: Props) {
+function TaskList({ tasks, onDelete }: Props) {
   return (
     <S.Container>
-      {tasks.map((task, index) => (
+      {tasks.map((task) => (
         <Task
-          key={`${task.text}-${index}`}
+          key={task.id}
           text={task.text}
-          onDelete={() => onDelete(index)}
+          onDelete={() => onDelete(task.id as number)}
         />
       ))}
     </S.Container>

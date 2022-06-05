@@ -1,23 +1,22 @@
 import React from 'react';
-import { Section as TSection } from '../../types';
+import { useAppContext } from '../../context';
 import Section from '../section';
 
 import * as S from './styles';
 
 type Props = {
-  sections: TSection[];
-  onDelete: (index: number) => void;
+  onDelete: (id: number) => void;
 };
 
-function SectionList({ sections, onDelete }: Props) {
+function SectionList({ onDelete }: Props) {
+  const { sections } = useAppContext();
   return (
     <S.Container>
       {sections.map((section, index) => (
         <Section
-          key={`${section.title}-${index}`}
-          title={section.title}
-          color={section.color}
-          onDelete={() => onDelete(index)}
+          key={section.id}
+          data={section}
+          onDelete={() => onDelete(section.id as number)}
         />
       ))}
     </S.Container>

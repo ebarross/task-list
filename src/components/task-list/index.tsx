@@ -15,6 +15,7 @@ function TaskList({ tasks, onDelete }: Props) {
       {tasks.map((task) => (
         <Task
           key={task.id}
+          id={task.id as number}
           text={task.text}
           onDelete={() => onDelete(task.id as number)}
         />

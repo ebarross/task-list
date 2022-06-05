@@ -8,6 +8,7 @@ type State = {
   deleteSection: (id: number) => void;
   addTask: (task: Task) => void;
   deleteTask: (id: number) => void;
+  moveTask: (id: number, sectionId: number) => void;
 };
 
 const AppContext = React.createContext<State | undefined>(undefined);
@@ -60,6 +61,19 @@ function AppProvider({ children }: ProviderProps) {
     setTasks(newTasks);
   };
 
+  const moveTask = (id: number, sectionId: number) => {
+    const task = tasks.find((t) => t.id === id);
+    if (!task) {
+      return;
+    }
+
+    const newTask = { ...task, sectionId };
+    const index = tasks.indexOf(task);
+    const newTasks = [...tasks];
+    newTasks[index] = newTask;
+    setTasks(newTasks);
+  };
+
   // eslint-disable-next-line react/jsx-no-constructed-context-values
   const value = {
     sections,
@@ -68,6 +82,7 @@ function AppProvider({ children }: ProviderProps) {
     deleteSection,
     addTask,
     deleteTask,
+    moveTask,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

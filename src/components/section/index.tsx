@@ -14,7 +14,7 @@ type Props = {
 
 function Section({ data, onDelete }: Props) {
   const { id: sectionId, title, color } = data;
-  const { tasks, addTask, deleteTask } = useAppContext();
+  const { tasks, addTask, deleteTask, moveTask } = useAppContext();
   const sectionTasks = tasks.filter((task) => task.sectionId === sectionId);
 
   const handleAdd = () => {
@@ -31,8 +31,21 @@ function Section({ data, onDelete }: Props) {
     }
   };
 
+  const handleDragOver = (event: React.DragEvent) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (event: React.DragEvent) => {
+    event.preventDefault();
+    const id = event.dataTransfer.getData('id');
+    if (sectionId) {
+      moveTask(Number(id), sectionId);
+    }
+  };
+
   return (
-    <S.Container>
+    <S.Container onDragOver={handleDragOver} onDrop={handleDrop}>
       <S.Header>
         <S.Title>
           <S.Text color={color}>{title}</S.Text>

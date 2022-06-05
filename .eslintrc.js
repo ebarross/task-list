@@ -15,6 +15,7 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint'],
   rules: {
+    'no-param-reassign': 'off',
     'no-restricted-globals': 'off',
     'no-unused-vars': ['warn', { args: 'none' }],
     'import/extensions': 'off',

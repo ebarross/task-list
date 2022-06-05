@@ -4,13 +4,19 @@ import DeleteButton from '../delete-button';
 import * as S from './styles';
 
 type Props = {
+  id: number;
   text: string;
   onDelete: () => void;
 };
 
-function Task({ text, onDelete }: Props) {
+function Task({ id, text, onDelete }: Props) {
+  const handleDragStart = (event: React.DragEvent) => {
+    event.dataTransfer.setData('id', String(id));
+    event.dataTransfer.dropEffect = 'move';
+  };
+
   return (
-    <S.Container>
+    <S.Container draggable onDragStart={handleDragStart}>
       <S.Actions>
         <DeleteButton onClick={onDelete} />
       </S.Actions>

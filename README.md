@@ -30,5 +30,5 @@ yarn install
 ### Running
 
 ```sh
-npm start
+yarn start
 ```

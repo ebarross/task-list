@@ -1,14 +1,14 @@
 import React, { useContext, useState } from 'react';
-import { Section, Task } from '../types';
+import { Section, SectionData, TaskData } from '../types';
 
 type State = {
   sections: Section[];
-  tasks: Task[];
-  addSection: (section: Section) => void;
+  addSection: (section: SectionData) => void;
   deleteSection: (id: number) => void;
-  addTask: (task: Task) => void;
-  deleteTask: (id: number) => void;
-  moveTask: (id: number, sectionId: number) => void;
+  addTask: (sectionId: number, task: TaskData) => void;
+  deleteTask: (sectionId: number, id: number) => void;
+  moveSection: (sourceId: number, targetId: number) => void;
+  moveTask: (sourceId: number, targetId: number) => void;
 };
 
 const AppContext = React.createContext<State | undefined>(undefined);
@@ -19,12 +19,12 @@ type ProviderProps = {
 
 function AppProvider({ children }: ProviderProps) {
   const [sections, setSections] = useState<Section[]>([]);
-  const [tasks, setTasks] = useState<Task[]>([]);
 
-  const addSection = (section: Section) => {
+  const addSection = (section: SectionData) => {
     const newSection = {
-      id: Date.now(),
       ...section,
+      id: Date.now(),
+      tasks: [],
     };
     setSections([...sections, newSection]);
   };
@@ -41,47 +41,110 @@ function AppProvider({ children }: ProviderProps) {
     setSections(newSections);
   };
 
-  const addTask = (task: Task) => {
-    const newTask = {
-      id: Date.now(),
+  const addTask = (sectionId: number, task: TaskData) => {
+    const section = sections.find((s) => s.id === sectionId);
+    if (!section) {
+      return;
+    }
+
+    const index = sections.indexOf(section);
+    const newSections = [...sections];
+    newSections[index].tasks.push({
       ...task,
-    };
-    setTasks([...tasks, newTask]);
+      id: Date.now(),
+    });
+    setSections(newSections);
   };
 
-  const deleteTask = (id: number) => {
-    const task = tasks.find((t) => t.id === id);
+  const deleteTask = (sectionId: number, id: number) => {
+    const section = sections.find((s) => s.id === sectionId);
+    if (!section) {
+      return;
+    }
+
+    const { tasks: tesks } = section;
+
+    const task = tesks.find((t) => t.id === id);
     if (!task) {
       return;
     }
 
-    const index = tasks.indexOf(task);
-    const newTasks = [...tasks];
+    const index = tesks.indexOf(task);
+    const newTasks = [...tesks];
     newTasks.splice(index, 1);
-    setTasks(newTasks);
+
+    const sectionIndex = sections.indexOf(section);
+    const newSection = { ...section, tasks: newTasks };
+
+    const newSections = [...sections];
+    newSections[sectionIndex] = newSection;
+    setSections(newSections);
   };
 
-  const moveTask = (id: number, sectionId: number) => {
-    const task = tasks.find((t) => t.id === id);
-    if (!task) {
+  const getTaskSection = (id: number) =>
+    sections.find((s) => s.tasks.find((t) => t.id === id));
+
+  const moveTask = (sourceId: number, targetId: number) => {
+    if (sourceId === targetId) {
       return;
     }
 
-    const newTask = { ...task, sectionId };
-    const index = tasks.indexOf(task);
-    const newTasks = [...tasks];
-    newTasks[index] = newTask;
-    setTasks(newTasks);
+    const sourceSection = getTaskSection(sourceId);
+    const targetSection = getTaskSection(targetId);
+    if (!sourceSection || !targetSection) {
+      return;
+    }
+    if (sourceSection.id === targetSection.id) {
+      const source = sourceSection.tasks.find((t) => t.id === sourceId);
+      const target = sourceSection.tasks.find((t) => t.id === targetId);
+      if (!source || !target) {
+        return;
+      }
+
+      if (sourceSection.id === targetSection.id) {
+        const sourceIndex = sourceSection.tasks.indexOf(source);
+        const targetIndex = sourceSection.tasks.indexOf(target);
+
+        const newTasks = [...sourceSection.tasks];
+        newTasks.splice(sourceIndex, 1);
+        newTasks.splice(targetIndex, 0, source);
+
+        const newSection = { ...sourceSection, tasks: newTasks };
+        const sectionIndex = sections.indexOf(sourceSection);
+        const newSections = [...sections];
+        newSections[sectionIndex] = newSection;
+        setSections(newSections);
+      }
+    }
+  };
+
+  const moveSection = (sourceId: number, targetId: number) => {
+    if (sourceId === targetId) {
+      return;
+    }
+
+    const source = sections.find((s) => s.id === sourceId);
+    const target = sections.find((s) => s.id === targetId);
+
+    if (source && target) {
+      const sourceIndex = sections.indexOf(source);
+      const targetIndex = sections.indexOf(target);
+
+      const newSections = [...sections];
+      newSections.splice(sourceIndex, 1);
+      newSections.splice(targetIndex, 0, source);
+      setSections(newSections);
+    }
   };
 
   // eslint-disable-next-line react/jsx-no-constructed-context-values
   const value = {
     sections,
-    tasks,
     addSection,
     deleteSection,
     addTask,
     deleteTask,
+    moveSection,
     moveTask,
   };
 

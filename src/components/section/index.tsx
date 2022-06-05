@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AddButton from '../add-button';
 import { Section as SectionType } from '../../types';
 import TaskList from '../task-list';
@@ -14,39 +14,54 @@ type Props = {
 
 function Section({ data, onDelete }: Props) {
   const { id: sectionId, title, color } = data;
-  const { tasks, addTask, deleteTask, moveTask } = useAppContext();
-  const sectionTasks = tasks.filter((task) => task.sectionId === sectionId);
+  const [dragTarget, setDragTarget] = useState('');
+  const { sections, addTask, deleteTask, moveSection } = useAppContext();
+  const tasks = sections.find((s) => s.id === sectionId)?.tasks;
+
+  if (!tasks) {
+    return null;
+  }
 
   const handleAdd = () => {
     const text = prompt('Task text:');
     if (text && sectionId) {
-      addTask({ sectionId, text });
+      addTask(sectionId, { text });
     }
   };
 
   const handleDelete = (id: number) => {
     const confirmed = confirm('Are you sure?');
     if (confirmed) {
-      deleteTask(id);
+      deleteTask(sectionId, id);
     }
   };
 
-  const handleDragOver = (event: React.DragEvent) => {
+  const handleDragStart = (event: React.DragEvent) => {
+    event.dataTransfer.setData('id', String(sectionId));
+    event.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+    setDragTarget(event.currentTarget.id);
     event.dataTransfer.dropEffect = 'move';
   };
 
   const handleDrop = (event: React.DragEvent) => {
     event.preventDefault();
-    const id = event.dataTransfer.getData('id');
-    if (sectionId) {
-      moveTask(Number(id), sectionId);
-    }
+    const dragData = event.dataTransfer.getData('id');
+    moveSection(Number(dragData), Number(dragTarget));
   };
 
   return (
-    <S.Container onDragOver={handleDragOver} onDrop={handleDrop}>
-      <S.Header>
+    <S.Container>
+      <S.Header
+        id={String(sectionId)}
+        draggable
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+      >
         <S.Title>
           <S.Text color={color}>{title}</S.Text>
         </S.Title>
@@ -55,7 +70,7 @@ function Section({ data, onDelete }: Props) {
         </S.Actions>
       </S.Header>
       <S.Body>
-        <TaskList tasks={sectionTasks} onDelete={handleDelete} />
+        <TaskList tasks={tasks} onDelete={handleDelete} />
         <AddButton onClick={handleAdd} />
       </S.Body>
     </S.Container>

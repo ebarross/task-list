@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useAppContext } from '../../context';
 import DeleteButton from '../delete-button';
 
@@ -11,7 +11,6 @@ type Props = {
 };
 
 function Task({ id, text, onDelete }: Props) {
-  const [target, setTarget] = useState('');
   const { moveTask } = useAppContext();
 
   const handleDragStart = (event: React.DragEvent) => {
@@ -19,16 +18,16 @@ function Task({ id, text, onDelete }: Props) {
     event.dataTransfer.dropEffect = 'move';
   };
 
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    setTarget(event.currentTarget.id);
-    event.dataTransfer.dropEffect = 'move';
+  const handleDragOver = (event: React.DragEvent) => {
     event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
   };
 
   const handleDrop = (event: React.DragEvent) => {
     event.preventDefault();
-    const data = event.dataTransfer.getData('id');
-    moveTask(Number(data), Number(target));
+    const sourceId = Number(event.dataTransfer.getData('id'));
+    const targetId = Number(event.currentTarget.id);
+    moveTask(sourceId, targetId);
   };
 
   return (

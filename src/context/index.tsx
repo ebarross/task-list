@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { Section, SectionData, TaskData } from '../types';
 
 type State = {
@@ -149,17 +149,19 @@ function AppProvider({ children }: ProviderProps) {
     }
   };
 
-  // eslint-disable-next-line react/jsx-no-constructed-context-values
-  const value = {
-    sections,
-    addSection,
-    updateSection,
-    deleteSection,
-    addTask,
-    deleteTask,
-    moveSection,
-    moveTask,
-  };
+  const value = useMemo<State>(
+    () => ({
+      sections,
+      addSection,
+      updateSection,
+      deleteSection,
+      addTask,
+      deleteTask,
+      moveSection,
+      moveTask,
+    }),
+    [sections],
+  );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

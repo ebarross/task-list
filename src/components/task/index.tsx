@@ -5,15 +5,18 @@ import DeleteButton from '../delete-button';
 import * as S from './styles';
 
 type Props = {
+  sectionId: number;
   id: number;
   text: string;
   onDelete: () => void;
 };
 
-function Task({ id, text, onDelete }: Props) {
+function Task({ sectionId, id, text, onDelete }: Props) {
   const { moveTask } = useAppContext();
 
   const handleDragStart = (event: React.DragEvent) => {
+    event.dataTransfer.setData('type', 'task');
+    event.dataTransfer.setData('sectionId', String(sectionId));
     event.dataTransfer.setData('id', String(id));
     event.dataTransfer.dropEffect = 'move';
   };
@@ -25,14 +28,15 @@ function Task({ id, text, onDelete }: Props) {
 
   const handleDrop = (event: React.DragEvent) => {
     event.preventDefault();
-    const sourceId = Number(event.dataTransfer.getData('id'));
-    const targetId = Number(event.currentTarget.id);
-    moveTask(sourceId, targetId);
+    if (event.dataTransfer.getData('type') === 'task') {
+      const sourceSectionId = Number(event.dataTransfer.getData('sectionId'));
+      const sourceId = Number(event.dataTransfer.getData('id'));
+      moveTask(sourceSectionId, sourceId, sectionId, id);
+    }
   };
 
   return (
     <S.Container
-      id={String(id)}
       draggable
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}

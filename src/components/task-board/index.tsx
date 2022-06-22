@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppContext } from '../../context';
 import Button from '../button';
-import SectionList from '../section-list';
+import Section from '../section';
 
 import * as S from './styles';
 
@@ -39,7 +39,15 @@ function TaskBoard({ title }: Props) {
       </S.Header>
       <S.Body>
         {sections.length > 0 ? (
-          <SectionList onDelete={handleDelete} />
+          <S.SectionList>
+            {sections.map((section) => (
+              <Section
+                key={section.id}
+                data={section}
+                onDelete={() => handleDelete(section.id)}
+              />
+            ))}
+          </S.SectionList>
         ) : (
           <S.NoContentMessage>
             <p>Oops, looks like there&apos;s nothing here.</p>

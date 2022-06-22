@@ -46,3 +46,9 @@ export const Body = styled.div`
   flex-direction: column;
   gap: 8px;
 `;
+
+export const TaskList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;

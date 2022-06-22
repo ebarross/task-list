@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import AddButton from '../add-button';
-import { Section as SectionType } from '../../types';
-import TaskList from '../task-list';
-
-import * as S from './styles';
-import DeleteButton from '../delete-button';
+import React from 'react';
+import { Section as SectionType, Task as TaskType } from '../../types';
 import { useAppContext } from '../../context';
+import AddButton from '../add-button';
+import DeleteButton from '../delete-button';
+import Task from '../task';
+import * as S from './styles';
 
 type Props = {
   data: SectionType;
@@ -14,14 +13,16 @@ type Props = {
 
 function Section({ data, onDelete }: Props) {
   const { id: sectionId, title, color } = data;
-  const [dragTarget, setDragTarget] = useState('');
-  const { sections, updateSection, addTask, deleteTask, moveSection } =
-    useAppContext();
-  const tasks = sections.find((s) => s.id === sectionId)?.tasks;
+  const {
+    sections,
+    updateSection,
+    addTask,
+    deleteTask,
+    moveSection,
+    moveTask,
+  } = useAppContext();
 
-  if (!tasks) {
-    return null;
-  }
+  const tasks = sections.find((s) => s.id === sectionId)?.tasks;
 
   const handleEdit = () => {
     const newTitle = prompt('New section title:');
@@ -45,26 +46,37 @@ function Section({ data, onDelete }: Props) {
   };
 
   const handleDragStart = (event: React.DragEvent) => {
+    event.dataTransfer.setData('type', 'section');
     event.dataTransfer.setData('id', String(sectionId));
     event.dataTransfer.dropEffect = 'move';
   };
 
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+  const handleDragOver = (event: React.DragEvent) => {
     event.preventDefault();
-    setDragTarget(event.currentTarget.id);
     event.dataTransfer.dropEffect = 'move';
   };
 
   const handleDrop = (event: React.DragEvent) => {
     event.preventDefault();
-    const dragData = event.dataTransfer.getData('id');
-    moveSection(Number(dragData), Number(dragTarget));
+    if (event.dataTransfer.getData('type') === 'section') {
+      const sourceId = Number(event.dataTransfer.getData('id'));
+      moveSection(sourceId, sectionId);
+    }
+  };
+
+  const handleTaskDrop = (event: React.DragEvent) => {
+    event.preventDefault();
+    const type = event.dataTransfer.getData('type');
+    if (tasks?.length === 0 && type === 'task') {
+      const sourceSectionId = Number(event.dataTransfer.getData('sectionId'));
+      const sourceId = Number(event.dataTransfer.getData('id'));
+      moveTask(sourceSectionId, sourceId, sectionId);
+    }
   };
 
   return (
     <S.Container>
       <S.Header
-        id={String(sectionId)}
         draggable
         onDragStart={handleDragStart}
         onDragOver={handleDragOver}
@@ -77,8 +89,20 @@ function Section({ data, onDelete }: Props) {
           <DeleteButton onClick={onDelete} />
         </S.Actions>
       </S.Header>
-      <S.Body>
-        <TaskList tasks={tasks} onDelete={handleDelete} />
+      <S.Body onDragOver={handleDragOver} onDrop={handleTaskDrop}>
+        {tasks && tasks.length > 0 && (
+          <S.TaskList>
+            {tasks.map((task) => (
+              <Task
+                key={task.id}
+                sectionId={sectionId}
+                id={task.id}
+                text={task.text}
+                onDelete={() => handleDelete(task.id)}
+              />
+            ))}
+          </S.TaskList>
+        )}
         <AddButton onClick={handleAdd} />
       </S.Body>
     </S.Container>

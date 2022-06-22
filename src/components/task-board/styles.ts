@@ -23,6 +23,11 @@ export const Body = styled.div`
   padding: 16px;
 `;
 
+export const SectionList = styled.div`
+  display: flex;
+  gap: 16px;
+`;
+
 export const NoContentMessage = styled.div`
   text-align: center;
   margin-top: 48px;

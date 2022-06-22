@@ -22,37 +22,50 @@ function AppProvider({ children }: ProviderProps) {
   const [sections, setSections] = useState<Section[]>([]);
 
   const addSection = (section: SectionData) => {
-    const newSection = {
-      ...section,
-      id: Date.now(),
-      tasks: [],
-    };
-    setSections([...sections, newSection]);
+    setSections([
+      ...sections,
+      {
+        ...section,
+        id: Date.now(),
+        tasks: [],
+      },
+    ]);
   };
 
   const deleteSection = (id: number) => {
-    const section = sections.find((s) => s.id === id);
-    if (!section) {
-      return;
-    }
-
-    const index = sections.indexOf(section);
-    const newSections = [...sections];
-    newSections.splice(index, 1);
-    setSections(newSections);
+    setSections(sections.filter((section) => section.id !== id));
   };
 
   const addTask = (sectionId: number, task: TaskData) => {
-    const section = sections.find((s) => s.id === sectionId);
-    if (!section) {
-      return;
-    }
+    const newSections = sections.map((section) => {
+      if (section.id === sectionId) {
+        const newTask = {
+          ...task,
+          id: Date.now(),
+        };
+        return {
+          ...section,
+          tasks: [...section.tasks, newTask],
+        };
+      }
 
-    const index = sections.indexOf(section);
-    const newSections = [...sections];
-    newSections[index].tasks.push({
-      ...task,
-      id: Date.now(),
+      return section;
+    });
+
+    setSections(newSections);
+  };
+
+  const deleteTask = (sectionId: number, id: number) => {
+    const newSections = sections.map((section) => {
+      if (section.id === sectionId) {
+        const newTasks = section.tasks.filter((task) => task.id !== id);
+        return {
+          ...section,
+          tasks: newTasks,
+        };
+      }
+
+      return section;
     });
     setSections(newSections);
   };
@@ -139,14 +152,15 @@ function AppProvider({ children }: ProviderProps) {
   };
 
   const updateSection = (id: number, title: string) => {
-    const section = sections.find((s) => s.id === id);
-    if (section) {
-      const newSection = { ...section, title };
-      const index = sections.indexOf(section);
-      const newSections = [...sections];
-      newSections[index] = newSection;
-      setSections(newSections);
-    }
+    const newSections = sections.map((section) => {
+      if (section.id === id) {
+        return { ...section, title };
+      }
+
+      return section;
+    });
+
+    setSections(newSections);
   };
 
   const value = useMemo<State>(

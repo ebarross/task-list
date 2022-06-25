@@ -8,11 +8,17 @@ type Props = {
   sectionId: number;
   id: number;
   text: string;
-  onDelete: () => void;
 };
 
-function Task({ sectionId, id, text, onDelete }: Props) {
-  const { moveTask } = useAppContext();
+function Task({ sectionId, id, text }: Props) {
+  const { moveTask, deleteTask } = useAppContext();
+
+  const handleDelete = () => {
+    const confirmed = confirm('Are you sure?');
+    if (confirmed) {
+      deleteTask(sectionId, id);
+    }
+  };
 
   const handleDragStart = (event: React.DragEvent) => {
     event.dataTransfer.setData('type', 'task');
@@ -43,7 +49,7 @@ function Task({ sectionId, id, text, onDelete }: Props) {
       onDrop={handleDrop}
     >
       <S.Actions>
-        <DeleteButton onClick={onDelete} />
+        <DeleteButton onClick={handleDelete} />
       </S.Actions>
       <S.Content>{text}</S.Content>
     </S.Container>

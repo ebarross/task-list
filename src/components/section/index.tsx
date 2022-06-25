@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Section as SectionType } from '../../types';
 import { useAppContext } from '../../context';
 import AddButton from '../add-button';
@@ -13,19 +13,10 @@ type Props = {
 
 function Section({ data, onDelete }: Props) {
   const { id: sectionId, title, color } = data;
-  const {
-    sections,
-    updateSection,
-    addTask,
-    deleteTask,
-    moveSection,
-    moveTask,
-  } = useAppContext();
+  const { sections, updateSection, addTask, moveSection, moveTask } =
+    useAppContext();
 
-  const tasks = useMemo(
-    () => sections.find((s) => s.id === sectionId)?.tasks,
-    [sectionId],
-  );
+  const tasks = sections.find((s) => s.id === sectionId)?.tasks;
 
   const handleEdit = () => {
     const newTitle = prompt('New section title:');
@@ -38,13 +29,6 @@ function Section({ data, onDelete }: Props) {
     const text = prompt('Task text:');
     if (text && sectionId) {
       addTask(sectionId, { text });
-    }
-  };
-
-  const handleDelete = (id: number) => {
-    const confirmed = confirm('Are you sure?');
-    if (confirmed) {
-      deleteTask(sectionId, id);
     }
   };
 
@@ -101,7 +85,6 @@ function Section({ data, onDelete }: Props) {
                 sectionId={sectionId}
                 id={task.id}
                 text={task.text}
-                onDelete={() => handleDelete(task.id)}
               />
             ))}
           </S.TaskList>

@@ -11,7 +11,14 @@ type Props = {
 };
 
 function Task({ sectionId, id, text }: Props) {
-  const { moveTask, deleteTask } = useAppContext();
+  const { moveTask, deleteTask, updateTask } = useAppContext();
+
+  const handleEdit = () => {
+    const newTitle = prompt('New task text:');
+    if (newTitle) {
+      updateTask(sectionId, id, newTitle);
+    }
+  };
 
   const handleDelete = () => {
     const confirmed = confirm('Are you sure?');
@@ -47,6 +54,7 @@ function Task({ sectionId, id, text }: Props) {
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
+      onClick={handleEdit}
     >
       <S.Actions>
         <DeleteButton onClick={handleDelete} />

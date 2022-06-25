@@ -7,6 +7,7 @@ type State = {
   updateSection: (id: number, title: string) => void;
   deleteSection: (id: number) => void;
   addTask: (sectionId: number, task: TaskData) => void;
+  updateTask: (sectionId: number, id: number, text: string) => void;
   deleteTask: (sectionId: number, id: number) => void;
   moveSection: (sourceId: number, targetId: number) => void;
   moveTask: (
@@ -24,7 +25,42 @@ type ProviderProps = {
 };
 
 function AppProvider({ children }: ProviderProps) {
-  const [sections, setSections] = useState<Section[]>([]);
+  const [sections, setSections] = useState<Section[]>([
+    {
+      id: 1,
+      title: 'section 1',
+      color: 'yellow',
+      tasks: [
+        {
+          id: 11,
+          text: 'task 11',
+        },
+        {
+          id: 12,
+          text: 'task 12',
+        },
+      ],
+    },
+    {
+      id: 2,
+      title: 'section 2',
+      color: 'blue',
+      tasks: [
+        {
+          id: 21,
+          text: 'task 21',
+        },
+        {
+          id: 22,
+          text: 'task 22',
+        },
+        {
+          id: 23,
+          text: 'task 23',
+        },
+      ],
+    },
+  ]);
 
   const addSection = (section: SectionData) => {
     setSections([
@@ -57,6 +93,28 @@ function AppProvider({ children }: ProviderProps) {
       return section;
     });
 
+    setSections(newSections);
+  };
+
+  const updateTask = (sectionId: number, id: number, text: string) => {
+    const newSections = sections.map((section) => {
+      if (section.id === sectionId) {
+        const newTasks = section.tasks.map((task) => {
+          if (task.id === id) {
+            return { ...task, text };
+          }
+
+          return task;
+        });
+
+        return {
+          ...section,
+          tasks: newTasks,
+        };
+      }
+
+      return section;
+    });
     setSections(newSections);
   };
 
@@ -188,6 +246,7 @@ function AppProvider({ children }: ProviderProps) {
       updateSection,
       deleteSection,
       addTask,
+      updateTask,
       deleteTask,
       moveSection,
       moveTask,

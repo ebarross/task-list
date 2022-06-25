@@ -1,6 +1,6 @@
 ## About The Project
 
-This is a basic Task List application, where you can add, remove and manage sections and to-do tasks.
+This is a basic To Do application with drag-and-drop, where you can add, remove and manage sections and to-do tasks.
 
 ### Build With
 
@@ -18,7 +18,7 @@ This is an example of how you can run the project locally.
 1.  Clone the repo
 
 ```sh
-git clone https://github.com/ebarross/task-list.git
+git clone https://github.com/ebarross/todo-dnd-app.git
 ```
 
 2.  Install NPM packages

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Section as SectionType, Task as TaskType } from '../../types';
+import React, { useMemo } from 'react';
+import { Section as SectionType } from '../../types';
 import { useAppContext } from '../../context';
 import AddButton from '../add-button';
 import DeleteButton from '../delete-button';
@@ -22,7 +22,10 @@ function Section({ data, onDelete }: Props) {
     moveTask,
   } = useAppContext();
 
-  const tasks = sections.find((s) => s.id === sectionId)?.tasks;
+  const tasks = useMemo(
+    () => sections.find((s) => s.id === sectionId)?.tasks,
+    [sectionId],
+  );
 
   const handleEdit = () => {
     const newTitle = prompt('New section title:');

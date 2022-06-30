@@ -22,7 +22,8 @@ export const Actions = styled.div`
   display: none;
 
   ${Container}:hover & {
-    display: block;
+    display: flex;
+    gap: 8px;
   }
 `;
 

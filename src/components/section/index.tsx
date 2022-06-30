@@ -1,9 +1,10 @@
 import React from 'react';
 import { Section as SectionType } from '../../types';
 import { useAppContext } from '../../context';
+import TrashIcon from '../icon/trash';
 import AddButton from '../add-button';
-import DeleteButton from '../delete-button';
 import Task from '../task';
+import ActionButton from '../action-button';
 import * as S from './styles';
 
 type Props = {
@@ -73,7 +74,9 @@ function Section({ data, onDelete }: Props) {
           <S.Text color={color}>{title}</S.Text>
         </S.Title>
         <S.Actions>
-          <DeleteButton onClick={onDelete} />
+          <ActionButton onClick={onDelete}>
+            <TrashIcon />
+          </ActionButton>
         </S.Actions>
       </S.Header>
       <S.Body onDragOver={handleDragOver} onDrop={handleTaskDrop}>

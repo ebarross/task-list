@@ -1,6 +1,8 @@
 import React from 'react';
 import { useAppContext } from '../../context';
-import DeleteButton from '../delete-button';
+import PencilIcon from '../icon/pencil';
+import TrashIcon from '../icon/trash';
+import ActionButton from '../action-button';
 
 import * as S from './styles';
 
@@ -54,10 +56,14 @@ function Task({ sectionId, id, text }: Props) {
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
-      onClick={handleEdit}
     >
       <S.Actions>
-        <DeleteButton onClick={handleDelete} />
+        <ActionButton onClick={handleEdit}>
+          <PencilIcon />
+        </ActionButton>
+        <ActionButton onClick={handleDelete}>
+          <TrashIcon />
+        </ActionButton>
       </S.Actions>
       <S.Content>{text}</S.Content>
     </S.Container>

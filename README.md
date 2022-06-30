@@ -9,7 +9,13 @@ This is a basic To Do application with drag-and-drop, where you can add, remove 
 - Styled Components
 - ESLint + Prettier
 
-## Getting Started
+### Demo
+
+The live version of application can be accessed at:
+
+- https://todo-dnd-app.vercel.app/
+
+## Running the project
 
 This is an example of how you can run the project locally.
 

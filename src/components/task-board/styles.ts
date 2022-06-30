@@ -14,7 +14,7 @@ export const Header = styled.div`
   box-shadow: rgb(233 233 231) 0px -1px 0px inset;
 
   h1 {
-    font-size: 40px;
+    font-size: 32px;
     margin-bottom: 16px;
   }
 `;

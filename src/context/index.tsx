@@ -25,42 +25,7 @@ type ProviderProps = {
 };
 
 function AppProvider({ children }: ProviderProps) {
-  const [sections, setSections] = useState<Section[]>([
-    {
-      id: 1,
-      title: 'section 1',
-      color: 'yellow',
-      tasks: [
-        {
-          id: 11,
-          text: 'task 11',
-        },
-        {
-          id: 12,
-          text: 'task 12',
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: 'section 2',
-      color: 'blue',
-      tasks: [
-        {
-          id: 21,
-          text: 'task 21',
-        },
-        {
-          id: 22,
-          text: 'task 22',
-        },
-        {
-          id: 23,
-          text: 'task 23',
-        },
-      ],
-    },
-  ]);
+  const [sections, setSections] = useState<Section[]>([]);
 
   const addSection = (section: SectionData) => {
     setSections([
